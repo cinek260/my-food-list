@@ -1,5 +1,20 @@
 {
   "expo": {
-    "sdkVersion": "19.0.0"
+    "sdkVersion": "19.0.0",
+    "ios": {
+      "bundleIdentifier": "myFoodList"
+    },
+    "android": {
+      "package": "myFoodList"
+    },
+    "name": "myFoodList",
+    "slug": "myfoodlist",
+    "version": "0.1.0",
+    "isDetached": true,
+    "detach": {
+      "scheme": "expb5353a006d6345e0afb493da98aa03f9",
+      "iosExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/ios-v1.18.2-sdk19.0.0-3fabbbb7-61b3-4a1e-9932-12d0aa6af276.tar.gz",
+      "androidExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/android-v1.18.4-sdk19.0.0-3fb414c9-8696-4966-a0ac-9ca424242424.tar.gz"
+    }
   }
 }
