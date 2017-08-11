@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import Camera from 'react-native-camera';
-import Base64 from 'base-64';
-import env from '../../env';
+import { connect } from 'react-redux';
+import getCodeData from './scanner.actions';
 
-export default class Scanner extends Component {
+class Scanner extends Component {
 
   constructor() {
     super();
@@ -19,7 +14,13 @@ export default class Scanner extends Component {
       bounds: null,
       codeReadedTime: null
     }
-    this.basicAuth = Base64.encode(`${env.gs1ApiUserName}:${env.gs1ApiPassword}`);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { productsList } = this.props;
+    if (prevProps.productsList !== productsList) {
+      console.log(productsList.toJS())  
+    }
   }
 
   render() {
@@ -31,7 +32,7 @@ export default class Scanner extends Component {
           onBarCodeRead={this.handleBarCodeRead}
           style={styles.preview}>
           <View style={this.setScannerStyle()}></View>
-          <View style={this.setButtonStyle()}>
+          <View style={this.setButtonStyle()} onPress={this.scanCode}>
             <Text style={this.setTextButtonStyle()} onPress={this.scanCode}>Scan</Text>
           </View>
         </Camera>
@@ -51,24 +52,10 @@ export default class Scanner extends Component {
     }
   }
 
-  scanCode = async () => {
+  scanCode = () => {
     const { type, data } = this.state;
-    try {
-      let response = await fetch(`https://www.produktywsieci.gs1.pl/api/products/${data}?aggregation=SOCIAL`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Basic ${this.basicAuth}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      })
-      let responseJson = await response.json();
-      console.log(responseJson);
-      return;
-    } catch(error) {
-      console.error(error);
-    }
-
+    const { basicAuth } = this.props;
+    this.props.getCodeData(data, basicAuth);
   }
 
   setScannerStyle = () => {
@@ -114,6 +101,13 @@ export default class Scanner extends Component {
     return styles;
   }
 }
+
+export default connect(state => ({
+  basicAuth: state.scannerReducer.get('basicAuth'),
+  productsList: state.scannerReducer.get('productsList')
+}), {
+  getCodeData
+})(Scanner);
 
 const styles = StyleSheet.create({
   container: {
