@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
-  AppRegistry,
-  Dimensions,
+  // AppRegistry,
+  // Dimensions,
   StyleSheet,
   Text,
-  TouchableHighlight,
+  // TouchableHighlight,
   View
 } from 'react-native';
 import Camera from 'react-native-camera';
@@ -24,9 +24,7 @@ export default class Scanner extends Component {
   }
 
   handleBarCodeRead({type, data, bounds}) {
-    console.log('type', type);
     console.log('data', data);
-    console.log('bounds', bounds);
   }
 
   takePicture() {
