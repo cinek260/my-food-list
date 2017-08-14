@@ -37,10 +37,10 @@ class Scanner extends PureComponent {
 
   render() {
     const { bounds } = this.state;
+    console.log('render scanner')
     return (
       <View style={styles.container}>
         <Camera
-          ref={cam => this.camera = cam}
           onBarCodeRead={this.handleBarCodeRead}
           style={styles.preview}>
           <View style={this.setScannerStyle()}></View>

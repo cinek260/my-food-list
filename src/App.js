@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react';
-import Scanner from './scanner/scanner.component';
 import { Provider } from 'react-redux';
-import createStore from './store'
+import { Scene, Router } from 'react-native-router-flux';
 import SideMenu from 'react-native-side-menu';
+import createStore from './store'
 import Menu from './menu/menu.component';
+import Scanner from './scanner/scanner.component';
+import List from './list/list.component';
+import CustomRouter from './customRouter';
 
 const store = createStore();
 
@@ -13,7 +16,12 @@ export default class App extends PureComponent {
     return (
       <Provider store={store}>
         <SideMenu menu={menu}>
-          <Scanner />
+          <CustomRouter>
+            <Scene key="root">
+              <Scene key="scanner" component={Scanner} title="Scanner"/>
+              <Scene key="list" component={List} title="List"/>
+            </Scene>
+          </CustomRouter>
         </SideMenu>
       </Provider>
     )

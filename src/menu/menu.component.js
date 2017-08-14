@@ -1,28 +1,16 @@
-import React, { PureComponent } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableHighlight, Alert } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, FlatList } from 'react-native';
 import colors from '../colors';
+import MenuItem from './menuItem.component';
 
-export default class Menu extends PureComponent {
-
-  onPressButton = () => {
-    Alert.alert('You tapped the button!')
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <FlatList data={[
-          {key: 'Scanner'},
-          {key: 'My List'},
-        ]} renderItem={({item}) => <TouchableHighlight onPress={this.onPressButton} underlayColor={colors.SNOW}>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}>{item.key}</Text>
-          </View>
-        </TouchableHighlight>}/>
-      </View>
-    )
-  }
-}
+export default () => (
+  <View style={styles.container}>
+    <FlatList data={[
+      {key: 'scanner', label: 'Scanner'},
+      {key: 'list', label: 'My List'},
+    ]} renderItem={({item}) => <MenuItem item={item} />}/>
+  </View>
+)
 
 const styles = StyleSheet.create({
   container: {
@@ -30,17 +18,5 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingTop: 50,
     backgroundColor: colors.BDAZZLED_BLUE
-  },
-  menuItem: {
-    backgroundColor: colors.BDAZZLED_BLUE,
-    borderBottomWidth: 1,
-    borderBottomColor: `${colors.SNOW}33`
-  },
-  menuItemText: {
-    padding: 10,
-    paddingLeft: 20,
-    paddingRight: 20,
-    fontSize: 20,
-    color: colors.SNOW
-  },
+  }
 });
