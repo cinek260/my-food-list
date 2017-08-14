@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import Camera from 'react-native-camera';
-import Base64 from 'base-64';
-import env from '../../env';
+import { connect } from 'react-redux';
+import getCodeData from './scanner.actions';
 
-export default class Scanner extends Component {
+class Scanner extends Component {
 
   constructor() {
     super();
@@ -19,7 +14,24 @@ export default class Scanner extends Component {
       bounds: null,
       codeReadedTime: null
     }
-    this.basicAuth = Base64.encode(`${env.gs1ApiUserName}:${env.gs1ApiPassword}`);
+  }
+
+  handleBarCodeRead = ({type, data, bounds}) => {
+    this.setState({ type, data, bounds, codeReadedTime: new Date().getTime() });
+    setTimeout(() => this.hideBarcodeScanner(), 300)
+  }
+
+  hideBarcodeScanner = () => {
+    const { codeReadedTime } = this.state;
+    if (codeReadedTime + 300 <= new Date().getTime()) {
+      this.setState({ type: null, data: null, bounds: null, codeReadedTime: null });
+    }
+  }
+
+  scanCode = () => {
+    const { type, data } = this.state;
+    const { basicAuth } = this.props;
+    this.props.getCodeData(data, basicAuth);
   }
 
   render() {
@@ -37,38 +49,6 @@ export default class Scanner extends Component {
         </Camera>
       </View>
     );
-  }
-
-  handleBarCodeRead = ({type, data, bounds}) => {
-    this.setState({ type, data, bounds, codeReadedTime: new Date().getTime() });
-    setTimeout(() => this.hideBarcodeScanner(), 300)
-  }
-
-  hideBarcodeScanner = () => {
-    const { codeReadedTime } = this.state;
-    if (codeReadedTime + 300 <= new Date().getTime()) {
-      this.setState({ type: null, data: null, bounds: null, codeReadedTime: null });
-    }
-  }
-
-  scanCode = async () => {
-    const { type, data } = this.state;
-    try {
-      let response = await fetch(`https://www.produktywsieci.gs1.pl/api/products/${data}?aggregation=SOCIAL`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Basic ${this.basicAuth}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      })
-      let responseJson = await response.json();
-      console.log(responseJson);
-      return;
-    } catch(error) {
-      console.error(error);
-    }
-
   }
 
   setScannerStyle = () => {
@@ -126,3 +106,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }
 });
+
+export default connect(state => ({
+  basicAuth: state.scannerReducer.get('basicAuth'),
+  loading: state.scannerReducer.get('loading'),
+  productsList: state.scannerReducer.get('productsList')
+}), {
+  getCodeData
+})(Scanner);
