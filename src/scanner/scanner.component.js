@@ -16,30 +16,6 @@ class Scanner extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const { productsList } = this.props;
-    if (prevProps.productsList !== productsList) {
-      console.log(productsList.toJS())  
-    }
-  }
-
-  render() {
-    const { bounds } = this.state;
-    return (
-      <View style={styles.container}>
-        <Camera
-          ref={cam => this.camera = cam}
-          onBarCodeRead={this.handleBarCodeRead}
-          style={styles.preview}>
-          <View style={this.setScannerStyle()}></View>
-          <View style={this.setButtonStyle()} onPress={this.scanCode}>
-            <Text style={this.setTextButtonStyle()} onPress={this.scanCode}>Scan</Text>
-          </View>
-        </Camera>
-      </View>
-    );
-  }
-
   handleBarCodeRead = ({type, data, bounds}) => {
     this.setState({ type, data, bounds, codeReadedTime: new Date().getTime() });
     setTimeout(() => this.hideBarcodeScanner(), 300)
@@ -56,6 +32,23 @@ class Scanner extends Component {
     const { type, data } = this.state;
     const { basicAuth } = this.props;
     this.props.getCodeData(data, basicAuth);
+  }
+
+  render() {
+    const { bounds } = this.state;
+    return (
+      <View style={styles.container}>
+        <Camera
+          ref={cam => this.camera = cam}
+          onBarCodeRead={this.handleBarCodeRead}
+          style={styles.preview}>
+          <View style={this.setScannerStyle()}></View>
+          <View style={this.setButtonStyle()}>
+            <Text style={this.setTextButtonStyle()} onPress={this.scanCode}>Scan</Text>
+          </View>
+        </Camera>
+      </View>
+    );
   }
 
   setScannerStyle = () => {
@@ -102,13 +95,6 @@ class Scanner extends Component {
   }
 }
 
-export default connect(state => ({
-  basicAuth: state.scannerReducer.get('basicAuth'),
-  productsList: state.scannerReducer.get('productsList')
-}), {
-  getCodeData
-})(Scanner);
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -120,3 +106,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }
 });
+
+export default connect(state => ({
+  basicAuth: state.scannerReducer.get('basicAuth'),
+  loading: state.scannerReducer.get('loading'),
+  productsList: state.scannerReducer.get('productsList')
+}), {
+  getCodeData
+})(Scanner);
