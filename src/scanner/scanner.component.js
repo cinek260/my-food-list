@@ -37,7 +37,6 @@ class Scanner extends PureComponent {
 
   render() {
     const { bounds } = this.state;
-    console.log('render scanner')
     return (
       <View style={styles.container}>
         <Camera
