@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Camera from 'react-native-camera';
 import { connect } from 'react-redux';
 import getCodeData from './scanner.actions';
+import colors from '../colors';
 
-class Scanner extends Component {
+class Scanner extends PureComponent {
 
   constructor() {
     super();
@@ -60,7 +61,7 @@ class Scanner extends Component {
       left: Math.round(bounds.origin.x),
       position: 'absolute',
       borderWidth: 2,
-      borderColor: 'red'
+      borderColor: colors.CARIBBEAN_GREEN
     } : {
       display: 'none'
     }
@@ -73,8 +74,8 @@ class Scanner extends Component {
       padding: 10,
       margin: 40,
       borderWidth: 5,
-      borderColor: data ? 'rgba(255, 0, 0, 1.0)' : 'rgba(255, 0, 0, .5)',
-      backgroundColor: data ? 'rgba(255, 255, 255, 1.0)' : 'rgba(255, 255, 255, .5)',
+      borderColor: `${colors.SNOW}33`,
+      backgroundColor: data ? colors.CARIBBEAN_GREEN : colors.INFRA_RED,
       borderRadius: 50,
       width: 100,
       height: 100,
@@ -89,7 +90,7 @@ class Scanner extends Component {
       fontSize: 20,
       textAlign: 'center',
       fontWeight: 'bold',
-      color: data ? 'rgba(0, 0, 0, 1.0)' : 'rgba(0, 0, 0, .5)'
+      color: colors.SNOW
     }
     return styles;
   }

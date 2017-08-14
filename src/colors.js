@@ -1,0 +1,7 @@
+export default {
+  BDAZZLED_BLUE: '#26547C',
+  INFRA_RED: '#EF476F',
+  ORANGE_YELLOW:'#FFD166',
+  CARIBBEAN_GREEN: '#06D6A0',
+  SNOW: '#FFFCF9'
+}
