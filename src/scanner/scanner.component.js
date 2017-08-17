@@ -40,7 +40,6 @@ class Scanner extends PureComponent {
     return (
       <View style={styles.container}>
         <Camera
-          ref={cam => this.camera = cam}
           onBarCodeRead={this.handleBarCodeRead}
           style={styles.preview}>
           <View style={this.setScannerStyle()}></View>
